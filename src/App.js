@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from 'react'
+import { createFeatureHub } from '@feature-hub/core'
+import { createCommonJsModuleLoader } from '@feature-hub/module-loader-commonjs'
+import { FeatureHubContextProvider, FeatureAppLoader } from '@feature-hub/react'
 
-function App() {
+const {featureAppManager} = createFeatureHub('123', {moduleLoader: createCommonJsModuleLoader({ react: React })})
+
+const ContextProv = ({ children }) => (
+<FeatureHubContextProvider value={{ featureAppManager }}>
+  {children}
+</FeatureHubContextProvider>
+)
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <ContextProv>
+      <div>Testing....</div>
+      <FeatureAppLoader serverSrc="http://localhost:4000/app.js" src="http://localhost:4000/app.js" featureAppId="1234" />
+    </ContextProv>
+  )
 }
 
 export default App;
